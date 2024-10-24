@@ -1,2 +1,2 @@
 # Bible_bot_2
-Second projet of Bible Bot using Mistral
+An evolution of my first project Bible Bot. Here I'll change some things, add new functionnaloties 
