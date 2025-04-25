@@ -68,8 +68,8 @@ Réponds en Français
 
 
 prompt = PromptTemplate(
-        template=template,
-    input_variables=['input']
+    template=template,
+    input_variables=['input', 'context'] 
 )
 
 
