@@ -2,96 +2,103 @@ import streamlit as st
 from main import ask
 
 
-# page config
-st.set_page_config(page_title="Bible_Bot-Thomas", page_icon="📖")  # Icône de Bible
+# Page configuration
+st.set_page_config(page_title="Bible_Bot Thomas", page_icon="📖")
 
 
-
-# message initiation
-if 'messages' not in st.session_state:
+# Initialiser l'historique des messages
+if "messages" not in st.session_state:
     st.session_state.messages = []
-
 
 def add_message(message, is_user):
     st.session_state.messages.append({"message": message, "is_user": is_user})
 
 
-
-# Interface 
-st.title("Thomas")
-st.write("Salut, je suis Thomas et je réponds à toutes tes questions concernant la Bible")
-st.write("Je suis expert en théologie et maîtrise l'histoire de la Bible. Je peux répondre à tes questions sur la Bible, notamment sur son histoire, ses personnages, ses thèmes et son impact sur la culture et la société.Je peux également t'aider à trouver des versets bibliques spécifiques et à comprendre leur contexte et leur signification.")
-
-# CSS 
+# Custom CSS
 st.markdown("""
-            
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto&display=swap" rel="stylesheet">
     <style>
-    .user-message {
-        font-family: "Noto Serif';
-        font-size: 16px;
-        color: black;
-        font-weight: None;
-        background-color: white;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 5px;
+        html, body, [class*="css"] {
+            font-family: 'Roboto', sans-serif;
+        }
 
-    }
-    .bot-message {
-        font-family: 'Merriweather', serif;
-        font-size: 16px;
-        color: black;
-        font-weight: None;
-        background-color: #E0F7FA;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 5px;
-    }
-    .footer {
-        font-family: 'Noto Serif', serif;
-        font-size: 14px;
-        color: #555555;
-        text-align: center;
-        margin-top: 100px;
-        font-weight: bold;
-    }
+        .user-message {
+            background-color: #D1E8FF;  /* light blue */
+            color: #000000;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 8px 0;
+        }
+
+        .bot-message {
+            background-color: rgba(245, 245, 245, 0.85);  /* semi-transparent grey */
+            color: #111111;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 8px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .user-message {
+                background-color: #2D4F7C;  /* soft navy */
+                color: #FFFFFF;
+            }
+
+            .bot-message {
+                background-color: #333333;
+                color: #F0F0F0;
+            }
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #777;
+            text-align: center;
+            margin-top: 50px;
+        }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# previious messages
+
+# En-tête de l'application
+st.title("📖 Thomas - Assistant Biblique")
+st.write("👋 Salut ! Je suis **Thomas**, ton assistant en théologie. Pose-moi toutes tes questions sur la Bible : versets, personnages, interprétations, et plus encore.")
+
+
+# Sidebar avec bouton de réinitialisation
+with st.sidebar:
+    st.markdown("## ⚙️ Options")
+    if st.button("🔄 Réinitialiser la conversation"):
+        st.session_state.messages = []
+        st.rerun()
+
+
+# Affichage des messages précédents
 for msg in st.session_state.messages:
     if msg["is_user"]:
-        st.markdown(f'<div class="user-message">Moi✨: {msg["message"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="user-message">🙋‍♂️ <b>Moi :</b><br>{msg["message"]}</div>', unsafe_allow_html=True)
     else:
-        st.markdown(f'<div class="bot-message">Thomas📖📖: {msg["message"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="bot-message">📖 <b>Thomas :</b><br>{msg["message"]}</div>', unsafe_allow_html=True)
 
 
+# Formulaire pour poser une nouvelle question
+with st.form(key="user_input_form"):
+    user_input = st.text_area("✍️ Pose ta question ici :", height=100, placeholder="Ex. Que dit la Bible sur la polygamie ?")
+    submitted = st.form_submit_button("Envoyer")
 
-user_input = st.text_input("Pose ta question ici:")
-
-# Button
-if st.button("Envoyer"):
-    if user_input:
-        add_message(user_input, is_user=True)  # Ajouter le message de l'utilisateur
-        response = ask(user_input)
-        add_message(response, is_user=False)   # Ajouter la réponse du chatbot
-        st.rerun()  # Recharger la page pour afficher les nouveaux messages
-    else:
-        st.write("Autre chose à me demander ? Pose ta question.")
-
-
-
-if not user_input:
-    st.write("J'ai hâte de t'aider")
+    if submitted:
+        if user_input.strip():
+            add_message(user_input, is_user=True)
+            with st.spinner("Thomas réfléchit..."):
+                response = ask(user_input)
+            add_message(response, is_user=False)
+            st.rerun()
+        else:
+            st.warning("❗ N'oublie pas de poser une vraie question !")
 
 
-
-
-
-
-
-# bio
-# 
-linkedin_url = "https://www.linkedin.com/in/ghilth/"
-st.markdown(f'<div class="footer">Made by <a href="{linkedin_url}" target="_blank" style="color: brown; text-style : italic;">Ghilth GBAGUIDI</a></div>', unsafe_allow_html=True)
+# Footer
+st.markdown(
+    '<div class="footer">Made with ❤️ by <a href="https://www.linkedin.com/in/ghilth/" target="_blank">Ghilth GBAGUIDI</a></div>',
+    unsafe_allow_html=True
+)

@@ -7,14 +7,16 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 
 #API keys loading
 hf_api_key = os.getenv('HF_TOKEN')
-mistral_api_key = os.getenv('MISTRAL_API_KEY')
 
+mistral_api_key = os.getenv('MISTRAL_API_KEY')
 
 
 
@@ -91,4 +93,4 @@ def ask(question: str):
 
  
 
-print(ask("QUe dit la Bible de la polygamie"))
+#print(ask("QUe dit la Bible de la polygamie"))
