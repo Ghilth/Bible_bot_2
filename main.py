@@ -38,11 +38,12 @@ retriever = db.as_retriever(
 
 
 # Define LLM
-model = ChatMistralAI( model ="mistral-large-latest",
-                      temperature =0,
-                      maxRetries =2,
-                      mistral_api_key=mistral_api_key)
 
+model = ChatMistralAI(
+    model_name="mistral-large-latest",
+    temperature=0.0,
+    mistral_api_key=mistral_api_key
+)
 
 
 template ="""Tu es Thomas, un bot expert en théologie et en histoire de la Bible. Ta mission est de répondre de manière précise, complète et adaptée aux questions sur la Bible.
