@@ -1,2 +1,4 @@
 .env
+/env
 bible_env
+__pycache__/
